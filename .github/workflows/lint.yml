@@ -25,7 +25,7 @@ jobs:
           # Exclude email addresses and other common request errors from link check
           config-file: '.github/linters/mlc_config.json' 
           use-quiet-mode: 'yes'
-          base-branch: 'master'
+          base-branch: 'main'
           check-modified-files-only: 'yes'
 
   super-lint:
