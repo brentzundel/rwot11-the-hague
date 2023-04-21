@@ -34,8 +34,8 @@ correlation is therefore directly tied to control of identity, or in other
 words, tied to control of how identifiable the subject is. [^1]
 
 Correlation is a required function of any identity system. However, correlation
-historically also has been misused by adversaries to threaten or harm people.
-To prevent the misuse of correlation in the context of self-sovereign
+historically also has been misused to monetize and track people without their
+consent. To prevent the misuse of correlation in the context of self-sovereign
 identity[^2], the power to correlate must also be self-sovereign. For
 individuals this means that the power to correlate must be, as much as possible,
 in the hands of the person being correlated.
@@ -70,9 +70,9 @@ general it means only sharing enough data for parties to successfully transact,
 while minimizing all unnecessary data. 
 
 Though essential as part of security best practices, minimal disclosure of data
-is vital for maintaining the privacy of people using digital identities. Special
-attention must be paid when collecting and sharing data, to limit that sharing
-to only that which is absolutely necessary.
+is vital for maintaining the privacy of people using digital credentials.
+Special attention must be paid when collecting and sharing data, to limit that
+sharing to only that which is absolutely necessary.
 
 The concept of data minimization guides the design and implementation of
 personal data protection regulations, such as the General Data Protection
@@ -80,7 +80,7 @@ Regulation (GDPR) in the European Union. For example:
 
 * Service providers must only collect the minimum amount of personal information
   necessary to perform a specific task or service.
-* Service providers must imit the length of time personal information is
+* Service providers must limit the length of time personal information is
   retained and must delete it when it is no longer needed.
 * Individuals should only share personal information with third parties when it
   is necessary to perform a task or service.
@@ -125,7 +125,8 @@ The implementation of data minimization can be challenging:
   and the need to minimize data to protect privacy and security.
 * **Siloed data:** Data may be collected and stored across multiple systems and
   departments, making it difficult to identify and remove unnecessary data.
-* **User consent:** People are not willing to share their personal information.
+* **User consent:** Systems may not be in place that allows users to clearly
+  indicate consent for the particular data that is collected. 
 
 ## Terminology
 
