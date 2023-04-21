@@ -128,53 +128,6 @@ The implementation of data minimization can be challenging:
 * **User consent:** Systems may not be in place that allows users to clearly
   indicate consent for the particular data that is collected. 
 
-## Terminology
-
-**Correlatable**: Data is said to be correlatable if by examining it that
-there is a way to determine whether it is associated with sets of other data
-stored elsewhere. This also includes lossy projections of the sets of data such
-as deterministic hashes that demonstrate that assocation.
-
-**Decorrelation**: A general term for any process that is used to reduce
-correlation within data, or cross-correlation with other sets of data, while
-preserving other useful aspects of the data. 
-
-**Differential Privacy**: A decorrelation process for sharing information about
-sets of data by describing the patterns of groups within the dataset while
-withholding information about individuals in the dataset. The idea behind
-differential privacy is that if the effect of making an arbitrary single
-substitution in the database is small enough, the query result cannot be used to
-infer much about any single individual, and therefore provides privacy. For
-instance, adding a random number (say 4) from one part of the set and
-subtracting 4 from another part of the set when the business purpose of the
-data is total or average.
-
-**Elide/Elision**: The term elide means "to leave out", and elision is the act
-or instance of ommitting something. (Redaction is a related term
-
-**Herd Privacy**: The decorrelation choices made by one set vs other data sets
-may result in correlation. Herd privacy process ensures that this doesn't happen
-by making them indistiguishable from other data sets.
-
-**Non-correlatable**: If there is no practical way to learn whether a set of
-data is a projection of a other data, they are said to be noncorrelatable.
-
-**Nonce**: aka "Number Used Once". This is an arbitrary number that is used just
-once in a cryptographic function such as signatures or encryption, to prevent
-correlation. Note that this is not necessarly a random number, simply a number
-that is never used again, and in some cases it can be quite valuable for a nonce
-to be generated deterministically.
-
-**Quasi-correlatable**: Between projections that are definitely correlatable and
-definitely noncorrelatable, there are projections that may leak a little
-information about their data. In particular (in no particular order), size,
-order, use of particular formatting, date/time, location, algorithm usage, and
-other identifiable patterns.
-
-**Salt**: This is random data (values and length) that are used as an additional
-input to a cryptographic function such as a hash of data, encryption, signature,
-to prevent correlation.
-
 # Techniques
 
 ### Elision
@@ -686,6 +639,55 @@ We also acknowledge the contributors to
 * Irene Hernandez, Independent 
 * Katryna Dow, Meeco
 * Christohper Allen, Blockchain Commons
+
+# Appendix
+
+## Terminology
+
+**Correlatable**: Data is said to be correlatable if by examining it that
+there is a way to determine whether it is associated with sets of other data
+stored elsewhere. This also includes lossy projections of the sets of data such
+as deterministic hashes that demonstrate that assocation.
+
+**Decorrelation**: A general term for any process that is used to reduce
+correlation within data, or cross-correlation with other sets of data, while
+preserving other useful aspects of the data. 
+
+**Differential Privacy**: A decorrelation process for sharing information about
+sets of data by describing the patterns of groups within the dataset while
+withholding information about individuals in the dataset. The idea behind
+differential privacy is that if the effect of making an arbitrary single
+substitution in the database is small enough, the query result cannot be used to
+infer much about any single individual, and therefore provides privacy. For
+instance, adding a random number (say 4) from one part of the set and
+subtracting 4 from another part of the set when the business purpose of the
+data is total or average.
+
+**Elide/Elision**: The term elide means "to leave out", and elision is the act
+or instance of ommitting something. (Redaction is a related term
+
+**Herd Privacy**: The decorrelation choices made by one set vs other data sets
+may result in correlation. Herd privacy process ensures that this doesn't happen
+by making them indistiguishable from other data sets.
+
+**Non-correlatable**: If there is no practical way to learn whether a set of
+data is a projection of a other data, they are said to be noncorrelatable.
+
+**Nonce**: aka "Number Used Once". This is an arbitrary number that is used just
+once in a cryptographic function such as signatures or encryption, to prevent
+correlation. Note that this is not necessarly a random number, simply a number
+that is never used again, and in some cases it can be quite valuable for a nonce
+to be generated deterministically.
+
+**Quasi-correlatable**: Between projections that are definitely correlatable and
+definitely noncorrelatable, there are projections that may leak a little
+information about their data. In particular (in no particular order), size,
+order, use of particular formatting, date/time, location, algorithm usage, and
+other identifiable patterns.
+
+**Salt**: This is random data (values and length) that are used as an additional
+input to a cryptographic function such as a hash of data, encryption, signature,
+to prevent correlation.
 
 # References
 
