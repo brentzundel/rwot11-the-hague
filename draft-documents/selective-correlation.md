@@ -331,7 +331,156 @@ disclosure, but these are not as broadly being investigated today.
   However, these techniques are extremely computationally expensive (by multiple
   orders of magnitude).
 
-# Use Cases
+# Technology
+
+In this section, we can develop a list of technical characteristics with regard
+to (anti-)correlation, and try to map how different technology choices can
+fulfill them.
+
+TODO:
+- Maybe better differentiate between disclosure of data on various levels:
+  credential, identifier, protocol, environment ("ambient correlation"?). On
+  which layer does the (anti-)correlation happen, e.g. does it happen in the
+  cryptographic signature, or on the identifier (DID) layer, etc.?
+- How does salting fit in? Who does the salting?
+- How do "sub-holders" fit in?
+
+Characteristics:
+* **[C1]** The Holder can selectively disclose data with a Verifier.
+* **[C2]** The Holder can selectively disclose data with a Verifier, without
+  requiring interaction with the Issuer during the disclosure process.
+* **[C3]** The Holder can selectively disclose data with different Verifiers,
+  without requiring interaction with the Issuer during the disclosure process.
+* **[C4]** The Holder can arbitrarily choose which subset of data to selectively
+  disclose with Verifiers, without requiring interaction with the Issuer during
+  the disclosure process.
+* **[C5]** When disclosing data to multiple different Verifiers, the Verifiers
+  cannot correlate the subject via any single, unique identifier.
+
+[//]: # (@ChristopherA: With Gordian, issuers can do to this, but not holders)
+
+* **[C6]** When disclosing data to the same Verifier in multiple different
+  interactions, the Verifier cannot correlate the subject via any single, unique
+  identifier.
+* **[C7]** The Verifier can verify that the Holder who is disclosing the data is
+  the same entity that has received the data from an Issuer. *<-- Note: Maybe
+  reference the work of the other RWoT11 group that's working on "holder
+  binding"*
+* **[C8]** The Holder can selectively disclose data that is derived (using
+  predicates) from the original data they have received from an Issuer.
+
+Choices:
+* **[PLAINSIG]** Plain signatures: Ed25519Signature2020, RSA signatures, etc.
+* **[SUBCREDS]** Issuing multiple, granular "sub-" credentials separately, which
+  the Holder can then use as appropriate for interactions with Verifiers.
+* **[SINGLEUSECREDS]** Issuing single-use "bearer" credentials intended to be
+  used for a single interaction between a Holder and a Verifier.
+* **[BBS2020-LD]** BBS+ Signatures 2020: https://w3c-ccg.github.io/ldp-bbs2020/
+* **[BBS-SIG]** BBS Signature Scheme: https://identity.foundation/bbs-signature/draft-looker-cfrg-bbs-signatures.html
+* **[ANONCREDS]** AnonCreds: https://anoncreds-wg.github.io/anoncreds-spec/
+* **[SD-JWT]** SD-JWT: https://github.com/oauthstuff/draft-selective-disclosure-jwt
+* **[JWP]** JWP: https://www.ietf.org/archive/id/draft-jmiller-jose-json-web-proof-00.html
+* **[REDACTION2016-LD]** Redaction Signature Suite 2016: https://w3c-ccg.github.io/lds-redaction2016/
+* **[MERKLE2021-LD]** Merkle Disclosure Proof 2021: https://w3c-ccg.github.io/Merkle-Disclosure-2021/
+* **[COCONUT]** Coconut: https://arxiv.org/abs/1802.07344
+* **[GORDIAN]** Gordian Envelopes: https://github.com/BlockchainCommons/Gordian/blob/master/Docs/Envelope-Tech-Intro.md
+* **[GORDIAN-IETF]** IETF I-D (draft will be submitted December): https://blockchaincommons.github.io/WIPs-IETF-draft-envelope/draft-mcnally-envelope.html
+
+Mapping of Characteristics and Technologies
+
+| Technology      | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 |
+| ---             | -- | -- | -- | -- | -- | -- | -- | -- |
+|PLAINSIG         | ✕ | ✕ | ✕ | ✕ | ✕ | ✕ | ✓ | ✕ |
+|SUBCREDS         | ✓ | ✓ | ✓ | ✕ | ✕ | ✕ | ✓ | ✕ |
+|SINGLEUSECREDS   | ✓ | ✕ | ✕ | ✕ | ✓ | ✓ | ✕ | ✕ |
+|BBS2020-LD       | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
+|BBS-SIG          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ |
+|ANONCREDS        | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+|SD-JWT           | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
+|JWP *            | ✓ | ✓ | ✓ | (✓) | (✓) | (✓) | ✓ | (✓) |
+|REDACTION2016-LD | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
+|MERKLE2021-LD    | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
+|COCONUT          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✕ | ✓ |
+|GORDIAN **       | ✓ | ✓ | ✓ | ✓ | (✓) | ? | (✓) | ? |
+
+\* C4, C5, C6, C8 depend on the underlying JSON Proof Algorithm (JPA).
+
+\** C5 can be done by issuers, but not holders. C7 can be achieved via
+encryption techniques.
+
+
+# Conclusion
+TODO
+
+[//]: # (We encourage policy makers to be awesome and do good, not evil.)
+
+# Acknowledgements
+
+We would like to acknowledge the following persons who contributed ideas that
+helped define the ideas in and the shape of this paper:
+* Adrian Gropper
+* Joe Andrieu
+
+We also acknowledge the contributors to
+[the 2019 paper](https://w3c-ccg.github.io/data-minimization/):
+
+* Lionel Wolberger, Platin.io
+* Brent Zundel, Evernym/Sovrin
+* Zachary Larson, Independent
+* Irene Hernandez, Independent 
+* Katryna Dow, Meeco
+* Christohper Allen, Blockchain Commons
+
+# Appendix
+
+## Terminology
+
+**Correlatable**: Data is said to be correlatable if by examining it that
+there is a way to determine whether it is associated with sets of other data
+stored elsewhere. This also includes lossy projections of the sets of data such
+as deterministic hashes that demonstrate that assocation.
+
+**Decorrelation**: A general term for any process that is used to reduce
+correlation within data, or cross-correlation with other sets of data, while
+preserving other useful aspects of the data. 
+
+**Differential Privacy**: A decorrelation process for sharing information about
+sets of data by describing the patterns of groups within the dataset while
+withholding information about individuals in the dataset. The idea behind
+differential privacy is that if the effect of making an arbitrary single
+substitution in the database is small enough, the query result cannot be used to
+infer much about any single individual, and therefore provides privacy. For
+instance, adding a random number (say 4) from one part of the set and
+subtracting 4 from another part of the set when the business purpose of the
+data is total or average.
+
+**Elide/Elision**: The term elide means "to leave out", and elision is the act
+or instance of ommitting something. (Redaction is a related term
+
+**Herd Privacy**: The decorrelation choices made by one set vs other data sets
+may result in correlation. Herd privacy process ensures that this doesn't happen
+by making them indistiguishable from other data sets.
+
+**Non-correlatable**: If there is no practical way to learn whether a set of
+data is a projection of a other data, they are said to be noncorrelatable.
+
+**Nonce**: aka "Number Used Once". This is an arbitrary number that is used just
+once in a cryptographic function such as signatures or encryption, to prevent
+correlation. Note that this is not necessarly a random number, simply a number
+that is never used again, and in some cases it can be quite valuable for a nonce
+to be generated deterministically.
+
+**Quasi-correlatable**: Between projections that are definitely correlatable and
+definitely noncorrelatable, there are projections that may leak a little
+information about their data. In particular (in no particular order), size,
+order, use of particular formatting, date/time, location, algorithm usage, and
+other identifiable patterns.
+
+**Salt**: This is random data (values and length) that are used as an additional
+input to a cryptographic function such as a hash of data, encryption, signature,
+to prevent correlation.
+
+## Use Cases
 
 These use cases focus at their core a single credential, presented by various
 parties to others, with desirable correlation as well as threats if undesirable
@@ -538,156 +687,6 @@ Healthcare Use Case:
     * DESIRABLE CORRELATION: Healthcare provider correlates clients to be
       employees of Company A.
     * ELISION BY HOLDER: Healthcare provider eludes the names of the clients.
-
-
-# Technology
-
-In this section, we can develop a list of technical characteristics with regard
-to (anti-)correlation, and try to map how different technology choices can
-fulfill them.
-
-TODO:
-- Maybe better differentiate between disclosure of data on various levels:
-  credential, identifier, protocol, environment ("ambient correlation"?). On
-  which layer does the (anti-)correlation happen, e.g. does it happen in the
-  cryptographic signature, or on the identifier (DID) layer, etc.?
-- How does salting fit in? Who does the salting?
-- How do "sub-holders" fit in?
-
-Characteristics:
-* **[C1]** The Holder can selectively disclose data with a Verifier.
-* **[C2]** The Holder can selectively disclose data with a Verifier, without
-  requiring interaction with the Issuer during the disclosure process.
-* **[C3]** The Holder can selectively disclose data with different Verifiers,
-  without requiring interaction with the Issuer during the disclosure process.
-* **[C4]** The Holder can arbitrarily choose which subset of data to selectively
-  disclose with Verifiers, without requiring interaction with the Issuer during
-  the disclosure process.
-* **[C5]** When disclosing data to multiple different Verifiers, the Verifiers
-  cannot correlate the subject via any single, unique identifier.
-
-[//]: # (@ChristopherA: With Gordian, issuers can do to this, but not holders)
-
-* **[C6]** When disclosing data to the same Verifier in multiple different
-  interactions, the Verifier cannot correlate the subject via any single, unique
-  identifier.
-* **[C7]** The Verifier can verify that the Holder who is disclosing the data is
-  the same entity that has received the data from an Issuer. *<-- Note: Maybe
-  reference the work of the other RWoT11 group that's working on "holder
-  binding"*
-* **[C8]** The Holder can selectively disclose data that is derived (using
-  predicates) from the original data they have received from an Issuer.
-
-Choices:
-* **[PLAINSIG]** Plain signatures: Ed25519Signature2020, RSA signatures, etc.
-* **[SUBCREDS]** Issuing multiple, granular "sub-" credentials separately, which
-  the Holder can then use as appropriate for interactions with Verifiers.
-* **[SINGLEUSECREDS]** Issuing single-use "bearer" credentials intended to be
-  used for a single interaction between a Holder and a Verifier.
-* **[BBS2020-LD]** BBS+ Signatures 2020: https://w3c-ccg.github.io/ldp-bbs2020/
-* **[BBS-SIG]** BBS Signature Scheme: https://identity.foundation/bbs-signature/draft-looker-cfrg-bbs-signatures.html
-* **[ANONCREDS]** AnonCreds: https://anoncreds-wg.github.io/anoncreds-spec/
-* **[SD-JWT]** SD-JWT: https://github.com/oauthstuff/draft-selective-disclosure-jwt
-* **[JWP]** JWP: https://www.ietf.org/archive/id/draft-jmiller-jose-json-web-proof-00.html
-* **[REDACTION2016-LD]** Redaction Signature Suite 2016: https://w3c-ccg.github.io/lds-redaction2016/
-* **[MERKLE2021-LD]** Merkle Disclosure Proof 2021: https://w3c-ccg.github.io/Merkle-Disclosure-2021/
-* **[COCONUT]** Coconut: https://arxiv.org/abs/1802.07344
-* **[GORDIAN]** Gordian Envelopes: https://github.com/BlockchainCommons/Gordian/blob/master/Docs/Envelope-Tech-Intro.md
-* **[GORDIAN-IETF]** IETF I-D (draft will be submitted December): https://blockchaincommons.github.io/WIPs-IETF-draft-envelope/draft-mcnally-envelope.html
-
-Mapping of Characteristics and Technologies
-
-| Technology      | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 |
-| ---             | -- | -- | -- | -- | -- | -- | -- | -- |
-|PLAINSIG         | ✕ | ✕ | ✕ | ✕ | ✕ | ✕ | ✓ | ✕ |
-|SUBCREDS         | ✓ | ✓ | ✓ | ✕ | ✕ | ✕ | ✓ | ✕ |
-|SINGLEUSECREDS   | ✓ | ✕ | ✕ | ✕ | ✓ | ✓ | ✕ | ✕ |
-|BBS2020-LD       | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
-|BBS-SIG          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ |
-|ANONCREDS        | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-|SD-JWT           | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
-|JWP *            | ✓ | ✓ | ✓ | (✓) | (✓) | (✓) | ✓ | (✓) |
-|REDACTION2016-LD | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
-|MERKLE2021-LD    | ✓ | ✓ | ✓ | ✓ | ✕ | ✕ | ✓ | ✕ |
-|COCONUT          | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✕ | ✓ |
-|GORDIAN **       | ✓ | ✓ | ✓ | ✓ | (✓) | ? | (✓) | ? |
-
-\* C4, C5, C6, C8 depend on the underlying JSON Proof Algorithm (JPA).
-
-\** C5 can be done by issuers, but not holders. C7 can be achieved via
-encryption techniques.
-
-
-# Conclusion
-TODO
-
-[//]: # (We encourage policy makers to be awesome and do good, not evil.)
-
-# Acknowledgements
-
-We would like to acknowledge the following persons who contributed ideas that
-helped define the ideas in and the shape of this paper:
-* Adrian Gropper
-* Joe Andrieu
-
-We also acknowledge the contributors to
-[the 2019 paper](https://w3c-ccg.github.io/data-minimization/):
-
-* Lionel Wolberger, Platin.io
-* Brent Zundel, Evernym/Sovrin
-* Zachary Larson, Independent
-* Irene Hernandez, Independent 
-* Katryna Dow, Meeco
-* Christohper Allen, Blockchain Commons
-
-# Appendix
-
-## Terminology
-
-**Correlatable**: Data is said to be correlatable if by examining it that
-there is a way to determine whether it is associated with sets of other data
-stored elsewhere. This also includes lossy projections of the sets of data such
-as deterministic hashes that demonstrate that assocation.
-
-**Decorrelation**: A general term for any process that is used to reduce
-correlation within data, or cross-correlation with other sets of data, while
-preserving other useful aspects of the data. 
-
-**Differential Privacy**: A decorrelation process for sharing information about
-sets of data by describing the patterns of groups within the dataset while
-withholding information about individuals in the dataset. The idea behind
-differential privacy is that if the effect of making an arbitrary single
-substitution in the database is small enough, the query result cannot be used to
-infer much about any single individual, and therefore provides privacy. For
-instance, adding a random number (say 4) from one part of the set and
-subtracting 4 from another part of the set when the business purpose of the
-data is total or average.
-
-**Elide/Elision**: The term elide means "to leave out", and elision is the act
-or instance of ommitting something. (Redaction is a related term
-
-**Herd Privacy**: The decorrelation choices made by one set vs other data sets
-may result in correlation. Herd privacy process ensures that this doesn't happen
-by making them indistiguishable from other data sets.
-
-**Non-correlatable**: If there is no practical way to learn whether a set of
-data is a projection of a other data, they are said to be noncorrelatable.
-
-**Nonce**: aka "Number Used Once". This is an arbitrary number that is used just
-once in a cryptographic function such as signatures or encryption, to prevent
-correlation. Note that this is not necessarly a random number, simply a number
-that is never used again, and in some cases it can be quite valuable for a nonce
-to be generated deterministically.
-
-**Quasi-correlatable**: Between projections that are definitely correlatable and
-definitely noncorrelatable, there are projections that may leak a little
-information about their data. In particular (in no particular order), size,
-order, use of particular formatting, date/time, location, algorithm usage, and
-other identifiable patterns.
-
-**Salt**: This is random data (values and length) that are used as an additional
-input to a cryptographic function such as a hash of data, encryption, signature,
-to prevent correlation.
 
 # References
 
